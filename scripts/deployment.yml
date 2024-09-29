@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservice
+spec:
+  selector:
+    matchLabels:
+      app: microservice
+  template:
+    metadata:
+      labels:
+        app: microservice
+    spec:
+      containers:
+      - name: book-catalog
+        image: sit722microservice.azurecr.io/book-catalog:latest
+        env:
+          - name: DATABASE_URL
+            value: postgresql://microservice_l6tk_user:ZIQnH0gL6dbsq4JBDAzlv2RglNpvQOB2@dpg-crsri4d6l47c73d40npg-a.oregon-postgres.render.com/microservice_l6tk
+        ports:
+        - containerPort: 8000  
+      - name: inventory-management
+        image: sit722microservice.azurecr.io/inventory-management:latest
+        env:
+          - name: DATABASE_URL
+            value: postgresql://microservice_l6tk_user:ZIQnH0gL6dbsq4JBDAzlv2RglNpvQOB2@dpg-crsri4d6l47c73d40npg-a.oregon-postgres.render.com/microservice_l6tk
+        ports:
+        - containerPort: 8001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: book-catalog-service
+spec:
+  selector:
+    app: microservice
+  ports:
+  - port: 8000
+    targetPort: 8000
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory-management-service
+spec:
+  selector:
+    app: microservice
+  ports:
+  - port: 8001
+    targetPort: 8001
+  type: LoadBalancer
+
+

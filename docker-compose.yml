@@ -1,0 +1,17 @@
+version: '3'
+services:
+  book_catalog:
+    build: ./book_catalog
+    image: book-catalog
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://microservice_l6tk_user:ZIQnH0gL6dbsq4JBDAzlv2RglNpvQOB2@dpg-crsri4d6l47c73d40npg-a.oregon-postgres.render.com/microservice_l6tk
+    
+  inventory_management:
+    build: ./inventory_management
+    image: inventory-management
+    ports:
+      - "8001:8001"
+    environment:
+      - DATABASE_URL=postgresql://microservice_l6tk_user:ZIQnH0gL6dbsq4JBDAzlv2RglNpvQOB2@dpg-crsri4d6l47c73d40npg-a.oregon-postgres.render.com/microservice_l6tk
